@@ -33,19 +33,11 @@ Skill Routing Notes, Tooling Notes and Personal Notes are reference guidance, no
 
 ## Task Decomposition
 
-Always break work into the **smallest independently executable pieces** before starting, where one piece = **one logical change, ideally ≤2 files or one layer**. Plan the full breakdown first, then execute one piece at a time, one per dispatch; independent pieces can go to separate subagents at the same time. Before each step, ask: "Can this be broken down further?" — if yes, split it first. This is the **sizing test**, reused throughout this section.
+Break all work into the smallest pieces that can each be finished and checked on their own, so every call stays small and a timeout or rate-limit error loses little. The sizing test: a piece is one logical change, ideally ≤2 files or one layer, small enough to finish in about a minute. Steps that only work together stay one piece.
 
-### Plan sizing (applies whenever a plan is written — e.g. `superpowers:writing-plans`)
-
-Apply the sizing test *while producing the plan*: every task must be independently executable in a single subagent dispatch. Don't emit a coarse task now intending to split it at execution time — the plan's granularity **is** the decomposition, and the executor inherits whatever framing the plan hands it. Before finalizing, re-read each task and split any that fail the test — **unless** they share state or must run sequentially, in which case they stay together (see Mode B). This shapes the plan output; it is not a separate step performed afterward.
-
-### Subagent dispatch modes
-
-**Mode A — Plan execution (strict):** One plan task per subagent, each passing the sizing test — aim for work that finishes quickly (roughly under a minute). Elapsed time isn't observable mid-dispatch, so size by scope *before* dispatching, not after.
-
-**Mode B — Ad-hoc fixes (pragmatic):** One logical task per subagent; mechanically similar work can batch (e.g. "rewrite these 3–5 files"). Bundle intermediate commits under one push. Fall back to Mode A if the user invokes `superpowers:subagent-driven-development` or says "execute plan X."
-
-**Always:** The size check is a pre-dispatch decision — you cannot measure how long a running dispatch is taking. If you can't state a task's scope in one line, it's too big; split it before dispatching.
+- Size each piece by its scope before it starts, since you can't see how long a running dispatch is taking. If you can't state the scope in one line, split it. Check again before starting each piece.
+- Plan the whole breakdown first, then do one piece at a time, whether in a subagent or yourself. Independent pieces can run in separate subagents at the same time.
+- When you write a plan, apply the sizing test to each task as you write it, because subagents get the tasks exactly as written. This overrides the advice in `superpowers:writing-plans` to fold setup, configuration and docs into the task that needs them.
 
 ---
 
@@ -166,9 +158,8 @@ Applies to every document a person will read: design docs, PRDs, Jira tickets, C
 
 The harness lists every installed skill with its description each session — match the task to a skill by that description. These notes cover only the non-obvious calls the descriptions don't capture:
 
-- **Preferred build sequence:** `superpowers:brainstorming` (define what X is) → `superpowers:writing-plans` (spec before code) → execution. Don't skip to code.
-- **Plan execution:** use `superpowers:subagent-driven-development` (Mode A); use `superpowers:executing-plans` only if the user asks for inline execution. When the plan has parts that write different files, run it in parallel lanes (see Parallel Planning and Execution).
-- **Plan → execution:** the user doesn't review plans. Once they've approved a design or said go, write the plan and start executing it straight away. Don't ask them to review the plan or choose how to run it. The one exception: after a long design conversation, hand off with a kickoff file instead (see Hand Off Long Runs to a Fresh Session).
+- **Build sequence:** start with `superpowers:brainstorming`, except for quick fixes and simple questions (see Skill Invocation Threshold). Once it's clear what to build, the brainstorm sizes the work. Build a small task straight away, with no design doc and no plan; this overrides the skill's short design doc and its hand-off to `superpowers:writing-plans`. For a complex task, write the full design doc for the user to approve.
+- **After the design doc is approved** (or the user says go): write the plan with `superpowers:writing-plans` and run it straight away with `superpowers:subagent-driven-development`. The plan is for you: the user never reads plans, so don't ask them to review it or choose how to run it. When the plan has parts that write different files, run them in parallel (see Parallel Planning and Execution). After a long design conversation, hand off with a kickoff file instead (see Hand Off Long Runs to a Fresh Session).
 - **Worktrees:** create git worktrees under `~/.superpowers/scratch/<repo>/<project>/worktrees/`, not next to the repo, and remove each one once its branch is merged.
 
 ---
