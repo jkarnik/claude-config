@@ -40,7 +40,7 @@ You write it first and keep it short: at most ~150 lines, written in parts. It h
   - "run the acceptance checks and paste their output";
   - "commit in the worktree; don't merge or push";
   - "spawn no agents".
-- **At most ~8 subagents at once, in one flat layer.** Mechanical tasks (scripts, widgets, renders, exact text replacements) run on sonnet. Plans, prose and reviews run on opus.
+- **One flat layer of subagents.** How many run at once follows the hardware check in CLAUDE.md's Task Decomposition. Mechanical tasks (scripts, widgets, renders, exact text replacements) run on sonnet. Plans, prose and reviews run on opus.
 
 ## Merging and the ledger
 

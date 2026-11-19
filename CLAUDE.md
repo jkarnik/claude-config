@@ -13,16 +13,16 @@ When two rules conflict, the higher-numbered-tier rule yields to the lower one. 
 
 3. Skill Invocation Threshold
 4. Exploration Uses Direct Tools, Not Agents
-5. Explicit Resumption State Written to Disk
-6. Scratch Files on Disk, Not /tmp
-7. Hand Off Long Runs to a Fresh Session
-8. Parallel Planning and Execution
-9. Write Long Documents Incrementally
-10. Doc Review Before Asking User to Review
+5. Check Facts Against Sources
+6. Explicit Resumption State Written to Disk
+7. Scratch Files on Disk, Not /tmp
+8. Hand Off Long Runs to a Fresh Session
+9. Parallel Planning and Execution
+10. Write Long Documents Incrementally
+11. Doc Review Before Asking User to Review
 
 **Tier 3 — Style & misc:**
 
-11. Brainstorming Visual Companion
 12. Response Style
 13. Writing for Human Readers
 14. Keeping CLAUDE.md Lean
@@ -37,6 +37,7 @@ Break all work into the smallest pieces that can each be finished and checked on
 
 - Size each piece by its scope before it starts, since you can't see how long a running dispatch is taking. If you can't state the scope in one line, split it. Check again before starting each piece.
 - Plan the whole breakdown first, then do one piece at a time, whether in a subagent or yourself. Independent pieces can run in separate subagents at the same time.
+- Before running more than 5 subagents at once, check the machine's free memory and CPU load against what they'll run, such as builds, browsers or Docker. If it can't take them all, start the rest as earlier ones finish.
 - When you write a plan, apply the sizing test to each task as you write it, because subagents get the tasks exactly as written. This overrides the advice in `superpowers:writing-plans` to fold setup, configuration and docs into the task that needs them.
 
 ---
@@ -51,6 +52,8 @@ The user is a **Product Manager with no software engineering background.** They 
 
 **Make all technical decisions yourself.** State what you decided and why if blocked — don't ask. The user's input is valuable for product requirements and desired outcomes only.
 
+**Exception: confirm risky actions first.** Before doing anything that is hard to undo or that other people will see, such as deleting files, force-pushing, or posting to Slack, Jira or Confluence, say in plain words what will happen and wait for a yes. Skip this when the user has already asked for that exact action.
+
 ---
 
 ## Skill Invocation Threshold
@@ -62,6 +65,17 @@ Only invoke skills for genuinely complex, multi-step, or architecturally signifi
 ## Exploration Uses Direct Tools, Not Agents
 
 Read the project yourself with Read, Bash, Grep, Glob, and LS — never spawn an agent to explore or summarize it for you. You need that understanding first-hand to divide the work and to check what agents send back. Agents are for work that produces something (code, a plan file, a review), and they read whatever that work needs. The only exception is a single narrow search question on a very large unfamiliar codebase.
+
+---
+
+## Check Facts Against Sources
+
+Applies to research, PRDs, product notes, blog posts and any reply that states facts.
+
+- Check each fact that matters, such as a number, a competitor's feature or how a product works, against a source you read in this session: a document, a web page or a query result. Memory and plausible guesses don't count.
+- If a source is blocked or nothing confirms a fact, say so. Never invent a number, quote or link to fill the gap.
+- Mark each claim you couldn't verify where it appears, with "(unverified)" and a few words on why, so the user can check it before sharing.
+- Say in a line what you checked and where, without narrating the search.
 
 ---
 
@@ -98,7 +112,7 @@ Use this whenever a plan splits into **2+ parts that write different files** (e.
 
 - Every file the project creates or changes has exactly one owner, and each part's plan opens with a values table of every name, number, time, label and path its outputs show.
 - Dispatch the foundation builders and all part planners in one message. Start each part as soon as its plan lands, and each task as soon as its dependencies merge.
-- One task per subagent, each in its own worktree. Only you merge, one at a time. At most ~8 subagents run at once, in one flat layer.
+- One task per subagent, each in its own worktree. Only you merge, one at a time. Subagents run in one flat layer.
 
 ---
 
@@ -115,12 +129,6 @@ Write large documents to disk in small chunks — one section per turn using Wri
 ## Doc Review Before Asking User to Review
 
 Before presenting any document for review, re-read the conversation and verify every decision, constraint, and requirement the user stated is incorporated. Fix gaps inline first.
-
----
-
-## Brainstorming Visual Companion
-
-When the brainstorming skill asks "Want to try the visual companion?", always **yes** — skip the offer and proceed directly.
 
 ---
 
@@ -160,6 +168,7 @@ The harness lists every installed skill with its description each session — ma
 
 - **Build sequence:** start with `superpowers:brainstorming`, except for quick fixes and simple questions (see Skill Invocation Threshold). Once it's clear what to build, the brainstorm sizes the work. Build a small task straight away, with no design doc and no plan; this overrides the skill's short design doc and its hand-off to `superpowers:writing-plans`. For a complex task, write the full design doc for the user to approve.
 - **After the design doc is approved** (or the user says go): write the plan with `superpowers:writing-plans` and run it straight away with `superpowers:subagent-driven-development`. The plan is for you: the user never reads plans, so don't ask them to review it or choose how to run it. When the plan has parts that write different files, run them in parallel (see Parallel Planning and Execution). After a long design conversation, hand off with a kickoff file instead (see Hand Off Long Runs to a Fresh Session).
+- **Visual companion:** when brainstorming would offer to open a browser tab with mockups, skip the offer and open it. The user always wants it.
 - **Worktrees:** create git worktrees under `~/.superpowers/scratch/<repo>/<project>/worktrees/`, not next to the repo, and remove each one once its branch is merged.
 
 ---

@@ -30,7 +30,6 @@ Copy everything below the line to `docs/superpowers/plans/<date>-<project>-kicko
 - **Ledger:** `docs/superpowers/plans/<date>-<project>.progress.md`, with the scratch path on line 1. After every merge, record the task ID and SHA, and keep "in progress" and "next" current.
 - **Branch:** everything branches from `<base>` and merges back into it. <Anything uncommitted to leave alone.>
 - **Known failures:** <API errors seen before and what they mean; which model mechanical tasks fall back to>.
-- **Concurrency:** at most ~8 subagents at once.
 
 ## 3. Ownership *(parallel)*
 

@@ -44,3 +44,7 @@ Run `git pull` in the repo; the next session picks up the changes. If you've cha
 ## Undo
 
 Delete the links `~/.claude/CLAUDE.md` and `~/.claude/reference`, then rename the `.backup-*` copies back.
+
+## License
+
+MIT. You can copy, change and share these files, as long as copies keep the notice in [LICENSE](LICENSE).
