@@ -14,7 +14,7 @@ They're written for a product manager who doesn't review code, so Claude makes t
 | `reference/writing-for-readers.md` | How to apply the writing rules, with examples |
 | `reference/pptx-rendering.md` | How to render PowerPoint slides to images |
 | `Claude-desktop/CLAUDE-desktop.md` | The rules that suit the Claude desktop app's mail, Slack, docs and Jira work, to paste into its settings |
-| `Claude-desktop/desktop-mention-watcher.md` | A scheduled task for the desktop app that drafts replies to comments addressed to you, without sending them |
+| `Claude-desktop/desktop-hourly-brief.md` | A scheduled task for the desktop app: a full brief each morning, then hourly updates, with replies drafted but never sent |
 | `install.sh` | Links `CLAUDE.md` and `reference/` into `~/.claude` |
 | `personal.example.md` | The starting point for your own `~/.claude/personal.md` |
 
