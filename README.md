@@ -13,6 +13,8 @@ They're written for a product manager who doesn't review code, so Claude makes t
 | `reference/kickoff-template.md` | A fill-in file for handing a big job to a fresh session |
 | `reference/writing-for-readers.md` | How to apply the writing rules, with examples |
 | `reference/pptx-rendering.md` | How to render PowerPoint slides to images |
+| `Claude-desktop/CLAUDE-desktop.md` | The rules that suit the Claude desktop app's mail, Slack, docs and Jira work, to paste into its settings |
+| `Claude-desktop/desktop-mention-watcher.md` | A scheduled task for the desktop app that drafts replies to comments addressed to you, without sending them |
 | `install.sh` | Links `CLAUDE.md` and `reference/` into `~/.claude` |
 | `personal.example.md` | The starting point for your own `~/.claude/personal.md` |
 
@@ -38,7 +40,7 @@ Run `git pull` in the repo; the next session picks up the changes. If you've cha
 ## Caveats
 
 - Claude's Edit and Write tools refuse to write through a symlink, so Claude edits these files at their real path in the repo.
-- Cowork sessions in the Claude desktop app skip a symlinked `~/.claude/CLAUDE.md` and any import outside the session's folder. If you use Cowork, copy `CLAUDE.md` into `~/.claude` instead of linking it.
+- Cowork sessions in the Claude desktop app skip a symlinked `~/.claude/CLAUDE.md` and any import outside the session's folder. To give Cowork the rules that suit its work, paste `Claude-desktop/CLAUDE-desktop.md` into Settings > Cowork > Global instructions, after swapping the notes under its last heading for your own. Copying `CLAUDE.md` in instead would also load the rules about plans, subagents and worktrees.
 - On Windows, symlinks need Developer Mode.
 
 ## Undo
